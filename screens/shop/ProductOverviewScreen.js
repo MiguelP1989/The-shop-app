@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Text, View, StyleSheet, FlatList } from "react-native";
 
 // Global imports
+import ProductItem from "../../components/shop/ProductItem";
 
 // Local imports
 
@@ -18,7 +19,15 @@ const ProductOverviewScreen = () => {
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
-        renderItem={(itemData) => <Text>{itemData.item.title}</Text>}
+        renderItem={(itemData) => (
+          <ProductItem
+            title={itemData.item.title}
+            imageUrl={itemData.item.imageUrl}
+            price={itemData.item.price}
+            onViewDetail={() => {}}
+            onAddToCart={() => {}}
+          />
+        )}
       />
     </View>
   );
