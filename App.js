@@ -1,11 +1,27 @@
+// Third-party imports
 import React from "react";
 import { Text, View } from "react-native";
+import { createStore, combineReducers } from "redux";
+import { Provider } from "react-redux";
+
+// Global imports
+import ProductOverviewScreen from "./screens/shop/ProductOverviewScreen";
+import productReducer from "./store/reducer/products";
+
+// Local imports
+
+////////////////////////////////////////////////////////////////////////////////
+
+const rootReducer = combineReducers({
+  products: productReducer,
+});
+const store = createStore(rootReducer);
 
 const App = () => {
   return (
-    <View>
-      <Text>A new app!</Text>
-    </View>
+    <Provider store={store}>
+      <ProductOverviewScreen />
+    </Provider>
   );
 };
 
