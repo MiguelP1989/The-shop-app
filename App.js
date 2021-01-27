@@ -5,8 +5,8 @@ import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
 
 // Global imports
-import ProductOverviewScreen from "./screens/shop/ProductOverviewScreen";
 import productReducer from "./store/reducer/products";
+import ShopNavigator from "./navigation/ShopNavigation";
 
 // Local imports
 
@@ -20,7 +20,7 @@ const store = createStore(rootReducer);
 const App = () => {
   return (
     <Provider store={store}>
-      <ProductOverviewScreen />
+      <ShopNavigator />
     </Provider>
   );
 };

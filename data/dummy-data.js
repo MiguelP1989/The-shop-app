@@ -50,5 +50,3 @@ export const PRODUCTS = [
     5.49
   ),
 ];
-
-export default PRODUCTS;

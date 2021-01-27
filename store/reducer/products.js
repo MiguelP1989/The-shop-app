@@ -12,8 +12,6 @@ const initialState = {
   userProducts: PRODUCTS.filter((prod) => prod.ownerId === "u1"),
 };
 
-const productReducer = (state = initialState, action) => {
+export default productReducer = (state = initialState, action) => {
   return state;
 };
-
-export default productReducer;
