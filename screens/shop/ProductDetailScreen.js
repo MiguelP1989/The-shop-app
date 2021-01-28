@@ -56,11 +56,13 @@ const styles = StyleSheet.create({
     color: "#888",
     textAlign: "center",
     marginVertical: 20,
+    fontFamily: "open-sans-bold",
   },
   description: {
     fontSize: 14,
     textAlign: "center",
     paddingHorizontal: 20,
+    fontFamily: "open-sans",
   },
   btn: {
     marginVertical: 10,

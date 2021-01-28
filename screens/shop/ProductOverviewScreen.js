@@ -41,4 +41,11 @@ const ProductOverviewScreen = ({ navigation }) => {
   );
 };
 
+// Navigation settings
+ProductOverviewScreen.navigationOptions = () => {
+  return {
+    headerTitle: "All Products",
+  };
+};
+
 export default ProductOverviewScreen;
