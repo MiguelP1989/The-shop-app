@@ -17,7 +17,7 @@ export default cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_TO_CART:
       const addedProduct = action.product;
-      console.log(addedProduct);
+      console.log("addedProduct", addedProduct);
       const productPrice = addedProduct.price;
       const productTitle = addedProduct.title;
       if (state.items[addedProduct.id]) {

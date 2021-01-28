@@ -13,25 +13,56 @@ import {
 
 // Global imports
 import Colors from "../../constants/Colors";
+import Cartitem from "../../components/shop/CartItem";
 
 // Local imports
 
 ////////////////////////////////////////////////////////////////////////////////
 
 const CartScreen = ({ navigation }) => {
+  // Hooks
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
-  console.log("cartTotalAmount", cartTotalAmount);
+  const cartItems = useSelector((state) => {
+    const transformedCartItems = [];
+    for (const key in state.cart.items) {
+      transformedCartItems.push({
+        productId: key,
+        productTitle: state.cart.items[key].productTitle,
+        productPrice: state.cart.items[key].productPrice,
+        quantity: state.cart.items[key].quantity,
+        sum: state.cart.items[key].sum,
+      });
+    }
+    return transformedCartItems;
+  });
+
   return (
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
-          Total: <Text style={styles.amout}>£ {cartTotalAmount}</Text>
+          Total:{" "}
+          <Text style={styles.amout}>£ {cartTotalAmount.toFixed(2)}</Text>
         </Text>
-        <Button title="Order Now" />
+        <Button
+          title="Order Now"
+          color={Colors.secondary}
+          disabled={cartItems.length === 0}
+        />
       </View>
-      <View>
-        <Text>hshshs</Text>
-      </View>
+      <FlatList
+        data={cartItems}
+        keyExtractor={(item) => item.productId}
+        renderItem={(itemData) => {
+          return (
+            <Cartitem
+              title={itemData.item.productTitle}
+              amount={itemData.item.sum}
+              quantity={itemData.item.quantity}
+              onRemove={() => {}}
+            />
+          );
+        }}
+      />
     </View>
   );
 };
