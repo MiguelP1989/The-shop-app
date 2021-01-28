@@ -1,6 +1,6 @@
 // Third-party imports
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Text,
   View,
@@ -12,6 +12,7 @@ import {
 
 // Global imports
 import Colors from "../../constants/Colors";
+import * as cartAction from "../../store/action/cart";
 
 // Local imports
 
@@ -22,6 +23,7 @@ const ProductDetailScreen = ({ navigation }) => {
   const productId = navigation.getParam("productId");
 
   // Hooks
+  const dispatch = useDispatch();
   const selectedProduct = useSelector((state) =>
     state.products.availableProducts.find((prod) => prod.id === productId)
   );
@@ -30,7 +32,11 @@ const ProductDetailScreen = ({ navigation }) => {
     <ScrollView>
       <Image style={styles.image} source={{ uri: selectedProduct.imageUrl }} />
       <View style={styles.btn}>
-        <Button color={Colors.primary} title="Add to Cart" onPress={() => {}} />
+        <Button
+          color={Colors.primary}
+          title="Add to Cart"
+          onPress={() => dispatch(cartAction.addToCart(selectedProduct))}
+        />
       </View>
       <Text style={styles.price}>£ {selectedProduct.price.toFixed(2)}</Text>
       <Text style={styles.description}>{selectedProduct.description}</Text>

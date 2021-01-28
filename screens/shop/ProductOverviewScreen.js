@@ -1,10 +1,11 @@
 // Third-party imports
 import React from "react";
-import { useSelector } from "react-redux";
-import { Text, View, StyleSheet, FlatList } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { View, FlatList } from "react-native";
 
 // Global imports
 import ProductItem from "../../components/shop/ProductItem";
+import * as cartAction from "../../store/action/cart";
 
 // Local imports
 
@@ -13,6 +14,7 @@ import ProductItem from "../../components/shop/ProductItem";
 const ProductOverviewScreen = ({ navigation }) => {
   // Hooks
   const products = useSelector((state) => state.products.availableProducts);
+  const dispatch = useDispatch();
 
   return (
     <View>
@@ -33,7 +35,9 @@ const ProductOverviewScreen = ({ navigation }) => {
                 },
               });
             }}
-            onAddToCart={() => {}}
+            onAddToCart={() => {
+              dispatch(cartAction.addToCart(itemData.item));
+            }}
           />
         )}
       />
