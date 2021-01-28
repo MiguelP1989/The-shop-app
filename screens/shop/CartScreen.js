@@ -1,19 +1,12 @@
 // Third-party imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  Button,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 
 // Global imports
 import Colors from "../../constants/Colors";
 import Cartitem from "../../components/shop/CartItem";
+import * as cartAction from "../../store/action/cart";
 
 // Local imports
 
@@ -21,6 +14,7 @@ import Cartitem from "../../components/shop/CartItem";
 
 const CartScreen = ({ navigation }) => {
   // Hooks
+  const dispatch = useDispatch();
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const cartItems = useSelector((state) => {
     const transformedCartItems = [];
@@ -33,8 +27,32 @@ const CartScreen = ({ navigation }) => {
         sum: state.cart.items[key].sum,
       });
     }
-    return transformedCartItems;
+    return transformedCartItems.sort((a, b) =>
+      a.productId > b.productId ? 1 : 1
+    );
   });
+
+  // Props
+  const buttonProps = {
+    title: "Order Now",
+    color: Colors.secondary,
+    disabled: cartItems.length === 0,
+  };
+
+  const flatListProps = {
+    data: cartItems,
+    keyExtractor: (item) => item.productId,
+    renderItem: (itemData) => (
+      <Cartitem
+        title={itemData.item.productTitle}
+        amount={itemData.item.sum}
+        quantity={itemData.item.quantity}
+        onRemove={() =>
+          dispatch(cartAction.removeFromCart(itemData.item.productId))
+        }
+      />
+    ),
+  };
 
   return (
     <View style={styles.screen}>
@@ -43,26 +61,9 @@ const CartScreen = ({ navigation }) => {
           Total:{" "}
           <Text style={styles.amout}>£ {cartTotalAmount.toFixed(2)}</Text>
         </Text>
-        <Button
-          title="Order Now"
-          color={Colors.secondary}
-          disabled={cartItems.length === 0}
-        />
+        <Button {...buttonProps} />
       </View>
-      <FlatList
-        data={cartItems}
-        keyExtractor={(item) => item.productId}
-        renderItem={(itemData) => {
-          return (
-            <Cartitem
-              title={itemData.item.productTitle}
-              amount={itemData.item.sum}
-              quantity={itemData.item.quantity}
-              onRemove={() => {}}
-            />
-          );
-        }}
-      />
+      <FlatList {...flatListProps} />
     </View>
   );
 };

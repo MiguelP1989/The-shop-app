@@ -20,10 +20,12 @@ const CartItem = ({ quantity, title, onRemove, amount }) => {
     <View style={styles.cartItem}>
       <View style={styles.itemData}>
         <Text style={styles.quantity}>{quantity}</Text>
-        <Text style={styles.text}>{title}</Text>
+        <Text style={styles.text} numberOfLines={5}>
+          {title}
+        </Text>
       </View>
-      <View style={styles.itemData}>
-        <Text style={styles.text}>£ {amount}</Text>
+      <View style={styles.amountBtn}>
+        <Text style={styles.text}>£ {amount.toFixed(2)}</Text>
         <TouchableOpacity onPress={onRemove} style={styles.deleteBtn}>
           <Ionicons
             name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
@@ -43,11 +45,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     flexDirection: "row",
     justifyContent: "space-between",
-    marginHorizontal: 20,
+    marginHorizontal: 6,
   },
   itemData: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "flex-start",
+    flexShrink: 1,
   },
   quantity: {
     fontFamily: "open-sans",
@@ -59,9 +63,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "open-sans-bold",
   },
-
+  amountBtn: {
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+  },
   deleteBtn: {
-    marginLeft: 20,
+    marginLeft: 10,
   },
 });
 
