@@ -5,7 +5,7 @@ import { createAppContainer } from "react-navigation";
 
 // Global imports
 import ProductOverviewScreen from "../screens/shop/ProductOverviewScreen";
-// import ProductDetailsScreen from "../screens/shop/ProductDetailsScreen";
+import ProductDetailScreen from "../screens/shop/ProductDetailScreen";
 // import OrdersScreen from "../screens/shop/OrdersScreen";
 // import CartScreen from "../screens/shop/CartScreen";
 
@@ -25,6 +25,7 @@ const defaultStackNavOptions = {
 const ProdcuctsNavigator = createStackNavigator(
   {
     ProductsOverview: ProductOverviewScreen,
+    ProductDetail: ProductDetailScreen,
   },
   {
     defaultNavigationOptions: defaultStackNavOptions,

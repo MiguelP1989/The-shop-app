@@ -1,6 +1,15 @@
 // Third-party imports
 import React from "react";
-import { Text, View, StyleSheet, Image, Button } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  Button,
+  TouchableOpacity,
+  TouchableNativeFeedback,
+  Platform,
+} from "react-native";
 
 // Global imports
 import Colors from "../../constants/Colors";
@@ -10,24 +19,34 @@ import Colors from "../../constants/Colors";
 ////////////////////////////////////////////////////////////////////////////////
 
 const ProductItem = ({ title, price, imageUrl, onViewDetail, onAddToCart }) => {
+  let TouchableCmp = TouchableOpacity;
+  if (Platform.OS === "android" && Platform.Version >= 21) {
+    TouchableCmp = TouchableNativeFeedback;
+  }
   return (
-    <View style={styles.product}>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={{ uri: imageUrl }} />
+    <TouchableCmp onPress={onViewDetail} useForeground>
+      <View style={styles.product}>
+        <View style={styles.imageContainer}>
+          <Image style={styles.image} source={{ uri: imageUrl }} />
+        </View>
+        <View style={styles.details}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.price}>{price.toFixed(2)}£</Text>
+        </View>
+        <View style={styles.actions}>
+          <Button
+            color={Colors.primary}
+            title="View Details"
+            onPress={onViewDetail}
+          />
+          <Button
+            color={Colors.primary}
+            title="To cart"
+            onPress={onAddToCart}
+          />
+        </View>
       </View>
-      <View style={styles.details}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.price}>{price.toFixed(2)}£</Text>
-      </View>
-      <View style={styles.actions}>
-        <Button
-          color={Colors.primary}
-          title="View Details"
-          onPress={onViewDetail}
-        />
-        <Button color={Colors.primary} title="To cart" onPress={onAddToCart} />
-      </View>
-    </View>
+    </TouchableCmp>
   );
 };
 

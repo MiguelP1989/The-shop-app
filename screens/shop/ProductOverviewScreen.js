@@ -10,7 +10,7 @@ import ProductItem from "../../components/shop/ProductItem";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const ProductOverviewScreen = () => {
+const ProductOverviewScreen = ({ navigation }) => {
   // Hooks
   const products = useSelector((state) => state.products.availableProducts);
 
@@ -24,7 +24,15 @@ const ProductOverviewScreen = () => {
             title={itemData.item.title}
             imageUrl={itemData.item.imageUrl}
             price={itemData.item.price}
-            onViewDetail={() => {}}
+            onViewDetail={() => {
+              navigation.navigate({
+                routeName: "ProductDetail",
+                params: {
+                  productId: itemData.item.id,
+                  productTitle: itemData.item.title,
+                },
+              });
+            }}
             onAddToCart={() => {}}
           />
         )}
@@ -32,7 +40,5 @@ const ProductOverviewScreen = () => {
     </View>
   );
 };
-// Styles
-// const styles = StyleSheet.create({})
 
 export default ProductOverviewScreen;
