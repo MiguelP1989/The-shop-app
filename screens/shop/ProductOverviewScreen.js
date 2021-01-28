@@ -1,11 +1,13 @@
 // Third-party imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Platform } from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 // Global imports
 import ProductItem from "../../components/shop/ProductItem";
 import * as cartAction from "../../store/action/cart";
+import CustomHeaderButton from "../../components/UI/HeaderButton";
 
 // Local imports
 
@@ -46,9 +48,22 @@ const ProductOverviewScreen = ({ navigation }) => {
 };
 
 // Navigation settings
-ProductOverviewScreen.navigationOptions = () => {
+ProductOverviewScreen.navigationOptions = (navData) => {
   return {
     headerTitle: "All Products",
+    headerRight: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Cart"
+            iconName={Platform.OS === "android" ? "md-cart" : "ios-cart"}
+            onPress={() => {
+              navData.navigation.navigate("Cart");
+            }}
+          />
+        </HeaderButtons>
+      );
+    },
   };
 };
 
