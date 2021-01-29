@@ -7,6 +7,7 @@ import { Text, View, StyleSheet, Button, FlatList } from "react-native";
 import Colors from "../../constants/Colors";
 import Cartitem from "../../components/shop/CartItem";
 import * as cartAction from "../../store/action/cart";
+import * as orderAction from "../../store/action/orders";
 
 // Local imports
 
@@ -37,6 +38,7 @@ const CartScreen = ({ navigation }) => {
     title: "Order Now",
     color: Colors.secondary,
     disabled: cartItems.length === 0,
+    onPress: () => dispatch(orderAction.addOrder(cartItems, cartTotalAmount)),
   };
 
   const flatListProps = {

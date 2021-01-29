@@ -8,6 +8,7 @@ import Apploading from "expo-app-loading";
 // Global imports
 import productReducer from "./store/reducer/products";
 import cartReducer from "./store/reducer/cart";
+import ordersReducer from "./store/reducer/orders";
 import ShopNavigator from "./navigation/ShopNavigation";
 
 // Local imports
@@ -17,6 +18,7 @@ import ShopNavigator from "./navigation/ShopNavigation";
 const rootReducer = combineReducers({
   products: productReducer,
   cart: cartReducer,
+  orders: ordersReducer,
 });
 const store = createStore(rootReducer);
 
