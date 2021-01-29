@@ -2,6 +2,7 @@
 import { Platform } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
+import { createDrawerNavigator } from "react-navigation-drawer";
 
 // Global imports
 import ProductOverviewScreen from "../screens/shop/ProductOverviewScreen";
@@ -28,11 +29,23 @@ const defaultStackNavOptions = {
   },
 };
 
+///
+
 const ProdcuctsNavigator = createStackNavigator(
   {
     ProductsOverview: ProductOverviewScreen,
     ProductDetail: ProductDetailScreen,
     Cart: CartScreen,
+  },
+  {
+    defaultNavigationOptions: defaultStackNavOptions,
+  }
+);
+
+////
+
+const OrdersNavigation = createStackNavigator(
+  {
     Orders: OrdersScreen,
   },
   {
@@ -40,4 +53,16 @@ const ProdcuctsNavigator = createStackNavigator(
   }
 );
 
-export default createAppContainer(ProdcuctsNavigator);
+const ShopNaviagtor = createDrawerNavigator(
+  {
+    Products: ProdcuctsNavigator,
+    Orders: OrdersNavigation,
+  },
+  {
+    contentOptions: {
+      activeTintColor: Colors.primary,
+    },
+  }
+);
+
+export default createAppContainer(ShopNaviagtor);

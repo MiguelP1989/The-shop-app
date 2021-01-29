@@ -1,10 +1,19 @@
 // Third-party imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Text, View, StyleSheet, Button, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  FlatList,
+  Platform,
+} from "react-native";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 // Global imports
 import Colors from "../../constants/Colors";
+import CustomHeaderButton from "../../components/UI/HeaderButton";
 
 // Local imports
 
@@ -14,14 +23,37 @@ const OrdersScreen = ({}) => {
   // Hooks
   const orders = useSelector((state) => state.orders.orders);
 
-  console.log("orders", orders);
-  return <View></View>;
+  console.log("oooooordeeers", orders);
+  return (
+    <FlatList
+      data={orders}
+      keyExtractor={(item) => item.id}
+      renderItem={(itemData) => {
+        return <Text>{itemData.item.totalAmount}</Text>;
+      }}
+    />
+  );
 };
 
 // Navigation Settings
-// OrdersScreen.navigationOptions = (navigationData) => {
-//   return {};
-// };
+OrdersScreen.navigationOptions = (navData) => {
+  return {
+    headerTitle: "Your Orders",
+    headerLeft: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Menu"
+            iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+            onPress={() => {
+              navData.navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      );
+    },
+  };
+};
 
 const styles = StyleSheet.create({});
 

@@ -71,8 +71,8 @@ const CartScreen = ({ navigation }) => {
 };
 
 // Navigation Settings
-CartScreen.navigationOptions = (navigationData) => {
-  return {};
+CartScreen.navigationOptions = {
+  headerTitle: "Your Cart",
 };
 
 const styles = StyleSheet.create({
