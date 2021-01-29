@@ -14,6 +14,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 // Global imports
 import Colors from "../../constants/Colors";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
+import OrderItem from "../../components/shop/OrderItem";
 
 // Local imports
 
@@ -23,13 +24,17 @@ const OrdersScreen = ({}) => {
   // Hooks
   const orders = useSelector((state) => state.orders.orders);
 
-  console.log("oooooordeeers", orders);
   return (
     <FlatList
       data={orders}
       keyExtractor={(item) => item.id}
       renderItem={(itemData) => {
-        return <Text>{itemData.item.totalAmount}</Text>;
+        return (
+          <OrderItem
+            total={itemData.item.totalAmount}
+            date={itemData.item.readableDate}
+          />
+        );
       }}
     />
   );
