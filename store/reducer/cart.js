@@ -4,6 +4,7 @@
 import CartItem from "../../models/cart-item";
 import { ADD_TO_CART } from "../action/cart";
 import { REMOVE_FROM_CART } from "../action/cart";
+import { ADD_ORDER } from "../action/orders";
 
 // Local imports
 
@@ -61,6 +62,9 @@ export default cartReducer = (state = initialState, action) => {
         items: updatedCartItems,
         totalAmount: state.totalAmount - selectedCartItem.productPrice,
       };
+
+    case ADD_ORDER:
+      return initialState;
   }
 
   return state;
