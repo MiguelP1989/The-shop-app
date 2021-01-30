@@ -2,9 +2,9 @@
 
 // Global imports
 import CartItem from "../../models/cart-item";
-import { ADD_TO_CART } from "../action/cart";
-import { REMOVE_FROM_CART } from "../action/cart";
+import { ADD_TO_CART, REMOVE_FROM_CART } from "../action/cart";
 import { ADD_ORDER } from "../action/orders";
+import { DELETE_PRODUCT } from "../action/products";
 
 // Local imports
 
@@ -40,6 +40,8 @@ export default cartReducer = (state = initialState, action) => {
         items: { ...state.items, [addedProduct.id]: updatedOrNewCartItem },
         totalAmount: state.totalAmount + prodPrice,
       };
+
+    ///
     case REMOVE_FROM_CART:
       const selectedCartItem = state.items[action.pid];
       const currentQty = selectedCartItem.quantity;
@@ -62,9 +64,23 @@ export default cartReducer = (state = initialState, action) => {
         items: updatedCartItems,
         totalAmount: state.totalAmount - selectedCartItem.productPrice,
       };
-
+    ///
     case ADD_ORDER:
       return initialState;
+
+    ///
+    case DELETE_PRODUCT:
+      if (!state.items[action.productId]) {
+        return state;
+      }
+      const updatedItems = { ...state.items };
+      const itemTotal = state.items[action.productId].sum;
+      delete updatedItems[action.productId];
+      return {
+        ...state,
+        items: updatedItems,
+        totalAmount: state.totalAmount - itemTotal,
+      };
   }
 
   return state;
