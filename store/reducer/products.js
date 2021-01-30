@@ -3,6 +3,7 @@
 // Global imports
 import { PRODUCTS } from "../../data/dummy-data";
 import { DELETE_PRODUCT } from "../action/products";
+
 // Local imports
 
 ////////////////////////////////////////////////////////////////////////////////

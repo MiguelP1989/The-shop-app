@@ -14,10 +14,14 @@ import * as userProductActions from "../../store/action/products";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const UserProductScreen = ({}) => {
+const UserProductScreen = ({ navigation }) => {
   // Hooks
   const userProducts = useSelector((state) => state.products.userProducts);
   const dispatch = useDispatch();
+
+  const editProductHandler = (id) => {
+    navigation.navigate("EditProduct", { productId: id });
+  };
 
   return (
     <FlatList
@@ -32,7 +36,11 @@ const UserProductScreen = ({}) => {
             onViewDetail={() => {}}
             onAddToCart={() => {}}
           >
-            <Button color={Colors.primary} title="Edit" onPress={() => {}} />
+            <Button
+              color={Colors.primary}
+              title="Edit"
+              onPress={() => editProductHandler(itemData.item.id)}
+            />
             <Button
               color={Colors.primary}
               title="Delete"
@@ -58,6 +66,19 @@ UserProductScreen.navigationOptions = (navData) => {
             iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
             onPress={() => {
               navData.navigation.toggleDrawer();
+            }}
+          />
+        </HeaderButtons>
+      );
+    },
+    headerRight: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Add"
+            iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
+            onPress={() => {
+              navData.navigation.navigate("EditProduct");
             }}
           />
         </HeaderButtons>

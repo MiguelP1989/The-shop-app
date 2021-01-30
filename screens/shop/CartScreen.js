@@ -62,7 +62,10 @@ const CartScreen = ({ navigation }) => {
       <View style={styles.summary}>
         <Text style={styles.summaryText}>
           Total:{" "}
-          <Text style={styles.amout}>£ {cartTotalAmount.toFixed(2)}</Text>
+          <Text style={styles.amout}>
+            {/* to not en up with min number */}£{" "}
+            {Math.round(cartTotalAmount.toFixed(2) * 100) / 200}
+          </Text>
         </Text>
         <Button {...buttonProps} />
       </View>
