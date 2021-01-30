@@ -1,6 +1,6 @@
 // Third-party imports
 import React, { useState, useEffect, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   StyleSheet,
   ScrollView,
@@ -13,6 +13,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 // Global imports
 import CustomHeaderButton from "../../components/UI/HeaderButton";
+import * as userProductActions from "../../store/action/products";
 
 // Local imports
 
@@ -20,6 +21,7 @@ import CustomHeaderButton from "../../components/UI/HeaderButton";
 
 const EditProductScreen = ({ navigation }) => {
   //Hooks
+  const dispatch = useDispatch();
   const productId = navigation.getParam("productId");
   const editProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === productId)
@@ -35,8 +37,21 @@ const EditProductScreen = ({ navigation }) => {
   );
 
   const submitHandler = useCallback(() => {
-    console.log("submiting");
-  }, []);
+    if (editProduct) {
+      dispatch(
+        userProductActions.updateProduct(
+          productId,
+          title,
+          imageUrl,
+          description
+        )
+      );
+    } else {
+      dispatch(
+        userProductActions.createProduct(title, description, imageUrl, price)
+      );
+    }
+  }, [dispatch, productId, title, description, imageUrl, price]);
 
   useEffect(() => {
     navigation.setParams({ submit: submitHandler });
