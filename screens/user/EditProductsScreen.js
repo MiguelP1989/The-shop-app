@@ -1,5 +1,5 @@
 // Third-party imports
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
   StyleSheet,
@@ -34,6 +34,14 @@ const EditProductScreen = ({ navigation }) => {
     editProduct ? editProduct.description : ""
   );
 
+  const submitHandler = useCallback(() => {
+    console.log("submiting");
+  }, []);
+
+  useEffect(() => {
+    navigation.setParams({ submit: submitHandler });
+  }, []);
+
   return (
     <ScrollView>
       <View style={styles.form}>
@@ -63,7 +71,6 @@ const EditProductScreen = ({ navigation }) => {
             />
           </View>
         )}
-
         <View style={styles.formControl}>
           <Text style={styles.label}>Description</Text>
           <TextInput
@@ -78,6 +85,7 @@ const EditProductScreen = ({ navigation }) => {
 };
 
 EditProductScreen.navigationOptions = (navData) => {
+  const submitFnc = navData.navigation.getParam("submit");
   return {
     headerTitle: navData.navigation.getParam("productId")
       ? "Edit Product"
@@ -90,9 +98,7 @@ EditProductScreen.navigationOptions = (navData) => {
             iconName={
               Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
             }
-            onPress={() => {
-              navData.navigation.navigate("EditProduct");
-            }}
+            onPress={submitFnc}
           />
         </HeaderButtons>
       );
