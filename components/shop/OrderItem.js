@@ -1,5 +1,5 @@
 // Third-party imports
-import React from "react";
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -17,14 +17,32 @@ import CartItem from "./CartItem";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const OrderItem = ({ total, date }) => {
+const OrderItem = ({ total, date, items }) => {
+  // Hooks
+  const [showDetails, setShowDetails] = useState(false);
   return (
     <View style={styles.orderItem}>
       <View style={styles.summary}>
         <Text style={styles.totalAmount}>£ {total}</Text>
         <Text style={styles.date}>{date}</Text>
       </View>
-      <Button title="Show Details" />
+      <Button
+        color={Colors.primary}
+        title={showDetails ? "Hide Details" : "Show Details"}
+        onPress={() => setShowDetails((prevState) => !prevState)}
+      />
+      {showDetails && (
+        <View style={styles.detailItems}>
+          {items.map((cartItem) => (
+            <CartItem
+              key={cartItem.productId}
+              quantity={cartItem.quantity}
+              amount={cartItem.sum}
+              title={cartItem.productTitle}
+            />
+          ))}
+        </View>
+      )}
     </View>
   );
 };
@@ -58,6 +76,10 @@ const styles = StyleSheet.create({
     fontFamily: "open-sans",
     fontSize: 16,
     color: "#888",
+  },
+
+  detailItems: {
+    width: "100%",
   },
 });
 

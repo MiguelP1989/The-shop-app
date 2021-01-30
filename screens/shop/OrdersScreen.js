@@ -31,6 +31,7 @@ const OrdersScreen = ({}) => {
       renderItem={(itemData) => {
         return (
           <OrderItem
+            items={itemData.item.items}
             total={itemData.item.totalAmount}
             date={itemData.item.readableDate}
           />

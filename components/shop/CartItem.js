@@ -15,7 +15,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const CartItem = ({ quantity, title, onRemove, amount }) => {
+const CartItem = ({ quantity, title, onRemove, amount, deletable }) => {
   return (
     <View style={styles.cartItem}>
       <View style={styles.itemData}>
@@ -26,13 +26,15 @@ const CartItem = ({ quantity, title, onRemove, amount }) => {
       </View>
       <View style={styles.amountBtn}>
         <Text style={styles.text}>£ {amount.toFixed(2)}</Text>
-        <TouchableOpacity onPress={onRemove} style={styles.deleteBtn}>
-          <Ionicons
-            name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
-            size={23}
-            color="red"
-          />
-        </TouchableOpacity>
+        {deletable && (
+          <TouchableOpacity onPress={onRemove} style={styles.deleteBtn}>
+            <Ionicons
+              name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
+              size={23}
+              color="red"
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
