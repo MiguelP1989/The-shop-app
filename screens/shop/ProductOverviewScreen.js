@@ -1,11 +1,12 @@
 // Third-party imports
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, FlatList, Platform } from "react-native";
+import { View, FlatList, Platform, Button } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 // Global imports
 import ProductItem from "../../components/shop/ProductItem";
+import Colors from "../../constants/Colors";
 import * as cartAction from "../../store/action/cart";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 
@@ -18,6 +19,20 @@ const ProductOverviewScreen = ({ navigation }) => {
   const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
 
+  const selectitemHandler = (id, title) => {
+    navigation.navigate({
+      routeName: "ProductDetail",
+      params: {
+        productId: id,
+        productTitle: title,
+      },
+    });
+  };
+
+  const onAddToCartHandler = (item) => {
+    dispatch(cartAction.addToCart(item));
+  };
+
   return (
     <View>
       <FlatList
@@ -28,19 +43,24 @@ const ProductOverviewScreen = ({ navigation }) => {
             title={itemData.item.title}
             imageUrl={itemData.item.imageUrl}
             price={itemData.item.price}
-            onViewDetail={() => {
-              navigation.navigate({
-                routeName: "ProductDetail",
-                params: {
-                  productId: itemData.item.id,
-                  productTitle: itemData.item.title,
-                },
-              });
+            onSelect={() => {
+              selectitemHandler(itemData.item.id, itemData.item.title);
             }}
-            onAddToCart={() => {
-              dispatch(cartAction.addToCart(itemData.item));
-            }}
-          />
+            onAddToCart={onAddToCartHandler}
+          >
+            <Button
+              color={Colors.primary}
+              title="View Details"
+              onPress={() =>
+                selectitemHandler(itemData.item.id, itemData.item.title)
+              }
+            />
+            <Button
+              color={Colors.primary}
+              title="To cart"
+              onPress={() => onAddToCartHandler(itemData.item)}
+            />
+          </ProductItem>
         )}
       />
     </View>

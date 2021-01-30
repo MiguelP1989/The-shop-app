@@ -1,10 +1,11 @@
 // Third-party imports
 import React from "react";
 import { useSelector } from "react-redux";
-import { StyleSheet, FlatList, Platform } from "react-native";
+import { StyleSheet, FlatList, Platform, Button } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 // Global imports
+import Colors from "../../constants/Colors";
 import ProductItem from "../../components/shop/ProductItem";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 
@@ -28,7 +29,10 @@ const UserProductScreen = ({}) => {
             price={itemData.item.price}
             onViewDetail={() => {}}
             onAddToCart={() => {}}
-          />
+          >
+            <Button color={Colors.primary} title="Edit" onPress={() => {}} />
+            <Button color={Colors.primary} title="Delete" onPress={() => {}} />
+          </ProductItem>
         );
       }}
     />
