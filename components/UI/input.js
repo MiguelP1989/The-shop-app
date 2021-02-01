@@ -81,17 +81,24 @@ const Input = ({
     }
   }, [inputState, id, onInputChange]);
 
+  // Props
+  const textInputProps = {
+    ...props,
+    style: styles.input,
+    value: inputState.value,
+    onChangeText: textChangeHandler,
+    onBlur: lostFocusHandler,
+  };
+
   return (
     <View style={styles.formControl}>
       <Text style={styles.label}>{label}</Text>
-      <TextInput
-        {...props}
-        style={styles.input}
-        value={inputState.value}
-        onChangeText={textChangeHandler}
-        onBlur={lostFocusHandler}
-      />
-      {inputState.touched && !inputState.isValid && <Text>{errorText} </Text>}
+      <TextInput {...textInputProps} />
+      {inputState.touched && !inputState.isValid && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{errorText} </Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -109,6 +116,14 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
+  },
+  errorContainer: {
+    marginVertical: 5,
+  },
+  errorText: {
+    fontFamily: "open-sans",
+    color: "tomato",
+    fontSize: 13,
   },
 });
 

@@ -1,6 +1,13 @@
 // Third-party imports
 import React, { useEffect, useCallback, useReducer } from "react";
-import { View, ScrollView, StyleSheet, Platform, Alert } from "react-native";
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Platform,
+  Alert,
+  KeyboardAvoidingView,
+} from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -108,63 +115,69 @@ const EditProductScreen = ({ navigation }) => {
   }, [submitHandler]);
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <View style={styles.formControl}>
+    <KeyboardAvoidingView
+    // behavior="padding"
+    // keyboardVerticalOffset={100}
+    // style={{ flex: 1 }}
+    >
+      <ScrollView>
+        <View style={styles.form}>
+          <View style={styles.formControl}>
+            <Input
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyType="next"
+              label="title"
+              errorText="Please enter a valid title!"
+              id="title"
+              onInputChange={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.title : ""}
+              initiallyValid={!!editedProduct}
+              required
+            />
+            <Input
+              label="Image Url"
+              id="imageUrl"
+              errorText="Please enter a valid image URL!"
+              keyboardType="default"
+              returnKeyType="next"
+              onInputChange={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.imageUrl : ""}
+              initiallyValid={!!editedProduct}
+              required
+            />
+          </View>
+          {!editedProduct && (
+            <Input
+              id="price"
+              label="Price"
+              errorText="Please enter a valid image Price!"
+              keyboardType="decimal-pad"
+              returnKeyType="next"
+              onInputChange={inputChangeHandler}
+              required
+              min={0.1}
+            />
+          )}
           <Input
+            id="description"
+            label="Description"
+            errorText="Please enter a valid image Description!"
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
-            returnKeyType="next"
-            label="title"
-            errorText="Please enter a valid title!"
-            id="title"
+            multiline
+            numberOfLines={3}
             onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.title : ""}
+            initialValue={editedProduct ? editedProduct.description : ""}
             initiallyValid={!!editedProduct}
             required
-          />
-          <Input
-            label="Image Url"
-            id="imageUrl"
-            errorText="Please enter a valid image URL!"
-            keyboardType="default"
-            returnKeyType="next"
-            onInputChange={inputChangeHandler}
-            initialValue={editedProduct ? editedProduct.imageUrl : ""}
-            initiallyValid={!!editedProduct}
-            required
+            minLength={5}
           />
         </View>
-        {!editedProduct && (
-          <Input
-            id="price"
-            label="Price"
-            errorText="Please enter a valid image Price!"
-            keyboardType="decimal-pad"
-            returnKeyType="next"
-            onInputChange={inputChangeHandler}
-            required
-            min={0.1}
-          />
-        )}
-        <Input
-          id="description"
-          label="Description"
-          errorText="Please enter a valid image Description!"
-          keyboardType="default"
-          autoCapitalize="sentences"
-          autoCorrect
-          multiline
-          numberOfLines={3}
-          onInputChange={inputChangeHandler}
-          initialValue={editedProduct ? editedProduct.description : ""}
-          initiallyValid={!!editedProduct}
-          required
-          minLength={5}
-        />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -191,19 +204,6 @@ EditProductScreen.navigationOptions = (navData) => {
 const styles = StyleSheet.create({
   form: {
     margin: 20,
-  },
-  formControl: {
-    width: "100%",
-  },
-  label: {
-    fontFamily: "open-sans-bold",
-    marginVertical: 8,
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: "#ccc",
-    borderBottomWidth: 1,
   },
 });
 
