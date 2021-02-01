@@ -19,14 +19,13 @@ import * as userProductActions from "../../store/action/products";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const EditProductScreen = (props) => {
+const EditProductScreen = ({ navigation }) => {
   // Hooks
-  const prodId = props.navigation.getParam("productId");
+  const prodId = navigation.getParam("productId");
   const editedProduct = useSelector((state) =>
     state.products.userProducts.find((prod) => prod.id === prodId)
   );
   const dispatch = useDispatch();
-
   const [title, setTitle] = useState(editedProduct ? editedProduct.title : "");
   const [imageUrl, setImageUrl] = useState(
     editedProduct ? editedProduct.imageUrl : ""
@@ -49,7 +48,7 @@ const EditProductScreen = (props) => {
   }, [dispatch, prodId, title, description, imageUrl, price]);
 
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
   return (
