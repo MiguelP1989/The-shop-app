@@ -1,6 +1,7 @@
 // Third-party imports
 import React, { useState } from "react";
-import { createStore, combineReducers } from "redux";
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import ReduxThunk from "redux-thunk";
 import { Provider } from "react-redux";
 import * as Font from "expo-font";
 import Apploading from "expo-app-loading";
@@ -20,7 +21,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   orders: ordersReducer,
 });
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const fetchFonts = () => {
   return Font.loadAsync({

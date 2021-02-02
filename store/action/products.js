@@ -10,14 +10,37 @@ export const deleteItem = (productId) => {
 };
 
 export const createProduct = (title, description, imageUrl, price) => {
-  return {
-    type: CREATE_PRODUCT,
-    productData: {
-      title,
-      description,
-      imageUrl,
-      price,
-    },
+  return async (dispatch) => {
+    // any async code
+    const resp = await fetch(
+      "https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/products.json",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          imageUrl,
+          price,
+        }),
+      }
+    );
+
+    const respData = await resp.json();
+    console.log("respData", respData);
+
+    dispatch({
+      type: CREATE_PRODUCT,
+      productData: {
+        id: respData.name,
+        title,
+        description,
+        imageUrl,
+        price,
+      },
+    });
   };
 };
 
