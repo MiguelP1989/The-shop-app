@@ -1,7 +1,14 @@
 // Third-party imports
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Text, View, StyleSheet, Button, FlatList } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Button,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 
 // Global imports
 import Colors from "../../constants/Colors";
@@ -13,9 +20,10 @@ import * as orderAction from "../../store/action/orders";
 
 ////////////////////////////////////////////////////////////////////////////////
 
-const CartScreen = ({ navigation }) => {
+const CartScreen = ({}) => {
   // Hooks
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const cartItems = useSelector((state) => {
     const transformedCartItems = [];
@@ -33,12 +41,26 @@ const CartScreen = ({ navigation }) => {
     );
   });
 
+  const removeOrderHandler = () => {
+    dispatch(cartAction.removeFromCart(itemData.item.productId));
+  };
+
+  const addOrderHandler = async (cartItems, cartTotalAmount) => {
+    setIsLoading(true);
+    try {
+      await dispatch(orderAction.addOrder(cartItems, cartTotalAmount));
+    } catch (err) {
+      console.log(err);
+    }
+    setIsLoading(false);
+  };
+
   // Props
   const buttonProps = {
     title: "Order Now",
     color: Colors.secondary,
     disabled: cartItems.length === 0,
-    onPress: () => dispatch(orderAction.addOrder(cartItems, cartTotalAmount)),
+    onPress: () => addOrderHandler(cartItems, cartTotalAmount),
   };
 
   const flatListProps = {
@@ -50,9 +72,7 @@ const CartScreen = ({ navigation }) => {
         amount={itemData.item.sum}
         quantity={itemData.item.quantity}
         deletable
-        onRemove={() =>
-          dispatch(cartAction.removeFromCart(itemData.item.productId))
-        }
+        onRemove={removeOrderHandler}
       />
     ),
   };
@@ -67,7 +87,11 @@ const CartScreen = ({ navigation }) => {
             {Math.round(cartTotalAmount.toFixed(2) * 100) / 200}
           </Text>
         </Text>
-        <Button {...buttonProps} />
+        {isLoading ? (
+          <ActivityIndicator size="small" color={Colors.primary} />
+        ) : (
+          <Button {...buttonProps} />
+        )}
       </View>
       <FlatList {...flatListProps} />
     </View>
@@ -103,6 +127,11 @@ const styles = StyleSheet.create({
   },
   amout: {
     color: Colors.primary,
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
