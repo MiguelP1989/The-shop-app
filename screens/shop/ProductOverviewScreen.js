@@ -1,7 +1,15 @@
 // Third-party imports
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, FlatList, Platform, Button } from "react-native";
+import {
+  View,
+  FlatList,
+  Platform,
+  Button,
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 // Global imports
@@ -17,12 +25,25 @@ import CustomHeaderButton from "../../components/UI/HeaderButton";
 
 const ProductOverviewScreen = ({ navigation }) => {
   // Hooks
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(productActions.fetchProducts());
+  const loadProducts = useCallback(async () => {
+    setError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(productActions.fetchProducts());
+    } catch (err) {
+      setError(err.message);
+    }
+    setIsLoading(false);
   }, [dispatch]);
+
+  useEffect(() => {
+    loadProducts();
+  }, [loadProducts]);
 
   const selectitemHandler = (id, title) => {
     navigation.navigate({
@@ -38,8 +59,36 @@ const ProductOverviewScreen = ({ navigation }) => {
     dispatch(cartAction.addToCart(item));
   };
 
+  if (error) {
+    return (
+      <View style={styles.center}>
+        <Text>Ups! Something went wrong...</Text>
+        <Button
+          title="Try again"
+          onPress={loadProducts}
+          color={Colors.primary}
+        />
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.center}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+  if (!isLoading && products.length === 0) {
+    return (
+      <View style={styles.center}>
+        <Text>No products found. Start adding some!</Text>
+      </View>
+    );
+  }
+
   return (
-    <View>
+    <>
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
@@ -68,7 +117,7 @@ const ProductOverviewScreen = ({ navigation }) => {
           </ProductItem>
         )}
       />
-    </View>
+    </>
   );
 };
 
@@ -104,5 +153,13 @@ ProductOverviewScreen.navigationOptions = (navData) => {
     },
   };
 };
+
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default ProductOverviewScreen;
