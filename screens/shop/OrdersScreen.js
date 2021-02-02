@@ -1,13 +1,12 @@
 // Third-party imports
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  Text,
-  View,
   StyleSheet,
-  Button,
   FlatList,
   Platform,
+  View,
+  ActivityIndicator,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
@@ -15,6 +14,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import Colors from "../../constants/Colors";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import OrderItem from "../../components/shop/OrderItem";
+import * as orderActions from "../../store/action/orders";
 
 // Local imports
 
@@ -22,22 +22,38 @@ import OrderItem from "../../components/shop/OrderItem";
 
 const OrdersScreen = ({}) => {
   // Hooks
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
   const orders = useSelector((state) => state.orders.orders);
 
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(orderActions.fetchOrders()).then(() => {
+      setIsLoading(false);
+    });
+  }, [dispatch]);
+
   return (
-    <FlatList
-      data={orders}
-      keyExtractor={(item) => item.id}
-      renderItem={(itemData) => {
-        return (
-          <OrderItem
-            items={itemData.item.items}
-            total={itemData.item.totalAmount}
-            date={itemData.item.readableDate}
-          />
-        );
-      }}
-    />
+    <>
+      {!isLoading || (
+        <View style={styles.center}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+        </View>
+      )}
+      <FlatList
+        data={orders}
+        keyExtractor={(item) => item.id}
+        renderItem={(itemData) => {
+          return (
+            <OrderItem
+              items={itemData.item.items}
+              total={itemData.item.totalAmount}
+              date={itemData.item.readableDate}
+            />
+          );
+        }}
+      />
+    </>
   );
 };
 
@@ -61,6 +77,12 @@ OrdersScreen.navigationOptions = (navData) => {
   };
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 export default OrdersScreen;
