@@ -3,6 +3,7 @@
 // Global imports
 import { PRODUCTS } from "../../data/dummy-data";
 import {
+  SET_PRODUCTS,
   DELETE_PRODUCT,
   CREATE_PRODUCT,
   UPDATE_PRODUCT,
@@ -20,7 +21,13 @@ const initialState = {
 
 export default productReducer = (state = initialState, action) => {
   switch (action.type) {
-    case DELETE_PRODUCT: {
+    case SET_PRODUCTS:
+      return {
+        availableProducts: action.products,
+        userProducts: action.products.filter((prod) => prod.ownerId === "u1"),
+      };
+
+    case DELETE_PRODUCT:
       return {
         ...state,
         userProducts: state.userProducts.filter(
@@ -30,7 +37,6 @@ export default productReducer = (state = initialState, action) => {
           (prod) => prod.id !== action.productId
         ),
       };
-    }
 
     case CREATE_PRODUCT:
       const newProduct = new Product(

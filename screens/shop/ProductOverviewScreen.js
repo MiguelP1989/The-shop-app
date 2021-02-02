@@ -1,5 +1,5 @@
 // Third-party imports
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { View, FlatList, Platform, Button } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -8,6 +8,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import ProductItem from "../../components/shop/ProductItem";
 import Colors from "../../constants/Colors";
 import * as cartAction from "../../store/action/cart";
+import * as productActions from "../../store/action/products";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 
 // Local imports
@@ -18,6 +19,10 @@ const ProductOverviewScreen = ({ navigation }) => {
   // Hooks
   const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(productActions.fetchProducts());
+  }, [dispatch]);
 
   const selectitemHandler = (id, title) => {
     navigation.navigate({
