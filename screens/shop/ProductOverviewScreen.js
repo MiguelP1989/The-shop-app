@@ -26,24 +26,26 @@ import CustomHeaderButton from "../../components/UI/HeaderButton";
 const ProductOverviewScreen = ({ navigation }) => {
   // Hooks
   const [isLoading, setIsLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(null);
   const products = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
 
   const loadProducts = useCallback(async () => {
     setError(null);
-    setIsLoading(true);
+    setIsRefreshing(true);
     try {
       await dispatch(productActions.fetchProducts());
     } catch (err) {
       setError(err.message);
     }
-    setIsLoading(false);
+    setIsRefreshing(false);
   }, [dispatch]);
 
   useEffect(() => {
     // load products initially
-    loadProducts();
+    setIsLoading(true);
+    loadProducts().then(() => setIsLoading(false));
   }, [loadProducts]);
 
   useEffect(() => {
@@ -99,6 +101,8 @@ const ProductOverviewScreen = ({ navigation }) => {
   return (
     <>
       <FlatList
+        onRefresh={loadProducts}
+        refreshing={isRefreshing}
         data={products}
         keyExtractor={(item) => item.id}
         renderItem={(itemData) => (
