@@ -112,6 +112,10 @@ export const updateProduct = (id, title, description, imageUrl) => {
       }
     );
 
+    if (!resp.ok) {
+      throw new Error("Something went wrong");
+    }
+
     const respData = await resp.json();
     console.log("respData", respData);
 
