@@ -42,6 +42,7 @@ const ProductOverviewScreen = ({ navigation }) => {
   }, [dispatch]);
 
   useEffect(() => {
+    // load products initially
     loadProducts();
   }, [loadProducts]);
 
