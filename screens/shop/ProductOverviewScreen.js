@@ -45,6 +45,14 @@ const ProductOverviewScreen = ({ navigation }) => {
     loadProducts();
   }, [loadProducts]);
 
+  useEffect(() => {
+    // updating the products if user use the navdrawer
+    const willDocusSub = navigation.addListener("willFocus", loadProducts);
+    return () => {
+      willDocusSub.remove();
+    };
+  }, [loadProducts]);
+
   const selectitemHandler = (id, title) => {
     navigation.navigate({
       routeName: "ProductDetail",
