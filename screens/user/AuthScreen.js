@@ -1,4 +1,5 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   View,
   Text,
@@ -12,15 +13,80 @@ import { LinearGradient } from "expo-linear-gradient";
 // Global imports
 import Input from "../../components/UI/input";
 import Colors from "../../constants/Colors";
+import * as authActions from "../../store/action/auth";
 
 // Local imports
 
 ////////////////////////////////////////////////////////////////////////////////
 
+const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
+
+const formReducer = (state, action) => {
+  console.log("action");
+  if (action.type === FORM_INPUT_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.inputId]: action.value,
+    };
+    const updateValidaties = {
+      ...state.inputValidaties,
+      [action.inputId]: action.isValid,
+    };
+    let updatedFormsIsValid = true;
+    for (const key in updateValidaties) {
+      updatedFormsIsValid = updatedFormsIsValid && updateValidaties[key];
+    }
+    return {
+      formIsValid: updatedFormsIsValid,
+      inputValues: updatedValues,
+      inputValidaties: updateValidaties,
+    };
+  }
+  return state;
+};
+
 const AuthScreen = ({}) => {
+  // Hooks
+  const dispatch = useDispatch();
+
+  [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      email: "",
+      password: "",
+    },
+    inputValidaties: {
+      email: false,
+      password: false,
+    },
+    formIsValid: false,
+  });
+
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      console.log("buu");
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        inputId: inputIdentifier,
+      });
+    },
+    [dispatchFormState]
+  );
+
+  const onSignUpHandler = () => {
+    console.log("hello");
+    dispatch(
+      authActions.signUp(
+        formState.inputValues.email,
+        formState.inputValues.password
+      )
+    );
+  };
+
   return (
     <KeyboardAvoidingView
-      behavior="padding"
+      behavior="height"
       keyboardVerticalOffset={50}
       style={styles.screen}
     >
@@ -37,8 +103,8 @@ const AuthScreen = ({}) => {
               required
               email
               autoCapitalize="none"
-              errorMessage="Please enter a valid email address"
-              onInputChange={() => {}}
+              errorText="Please enter a valid email address"
+              onInputChange={inputChangeHandler}
               initialValue=""
             />
             <Input
@@ -47,10 +113,10 @@ const AuthScreen = ({}) => {
               keyboarType="default"
               secureTextEntry
               required
-              minLenght={5}
+              minLength={6}
               autoCapitalize="none"
-              errorMessage="Please enter a valid  password"
-              onInputChange={() => {}}
+              errorText="Please enter a valid  password"
+              onInputChange={inputChangeHandler}
               initialValue=""
             />
             <View style={styles.action}>
@@ -58,7 +124,7 @@ const AuthScreen = ({}) => {
                 <Button
                   title="Login"
                   color={Colors.primary}
-                  onPress={() => {}}
+                  onPress={onSignUpHandler}
                 />
               </View>
               <View style={styles.btn}>
