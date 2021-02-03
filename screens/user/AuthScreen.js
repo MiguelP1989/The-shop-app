@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback } from "react";
+import React, { useReducer, useCallback, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   View,
@@ -22,7 +22,6 @@ import * as authActions from "../../store/action/auth";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 
 const formReducer = (state, action) => {
-  console.log("action");
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
       ...state.inputValues,
@@ -48,6 +47,7 @@ const formReducer = (state, action) => {
 const AuthScreen = ({}) => {
   // Hooks
   const dispatch = useDispatch();
+  const [isSignUp, setIsSignUp] = useState(false);
 
   [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -63,7 +63,6 @@ const AuthScreen = ({}) => {
 
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
-      console.log("buu");
       dispatchFormState({
         type: FORM_INPUT_UPDATE,
         value: inputValue,
@@ -74,14 +73,22 @@ const AuthScreen = ({}) => {
     [dispatchFormState]
   );
 
-  const onSignUpHandler = () => {
-    console.log("hello");
-    dispatch(
-      authActions.signUp(
-        formState.inputValues.email,
-        formState.inputValues.password
-      )
-    );
+  const authHandler = () => {
+    if (isSignUp) {
+      dispatch(
+        authActions.signUp(
+          formState.inputValues.email,
+          formState.inputValues.password
+        )
+      );
+    } else {
+      dispatch(
+        authActions.logIn(
+          formState.inputValues.email,
+          formState.inputValues.password
+        )
+      );
+    }
   };
 
   return (
@@ -122,16 +129,18 @@ const AuthScreen = ({}) => {
             <View style={styles.action}>
               <View style={styles.btn}>
                 <Button
-                  title="Login"
+                  title={isSignUp ? "Sign Up" : "Login"}
                   color={Colors.primary}
-                  onPress={onSignUpHandler}
+                  onPress={authHandler}
                 />
               </View>
               <View style={styles.btn}>
                 <Button
-                  title="Switch to Sign Up"
+                  title={`Switch to ${isSignUp ? "Login" : "Sign Up"}`}
                   color={Colors.secondary}
-                  onPress={() => {}}
+                  onPress={() => {
+                    setIsSignUp((prevState) => !prevState);
+                  }}
                 />
               </View>
             </View>
