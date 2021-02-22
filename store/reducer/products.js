@@ -15,8 +15,8 @@ import Product from "../../models/product";
 ////////////////////////////////////////////////////////////////////////////////
 
 const initialState = {
-  availableProducts: PRODUCTS,
-  userProducts: PRODUCTS.filter((prod) => prod.ownerId === "u1"),
+  availableProducts: [],
+  userProducts: [],
 };
 
 export default productReducer = (state = initialState, action) => {
@@ -24,7 +24,7 @@ export default productReducer = (state = initialState, action) => {
     case SET_PRODUCTS:
       return {
         availableProducts: action.products,
-        userProducts: action.products.filter((prod) => prod.ownerId === "u1"),
+        userProducts: action.userProducts,
       };
 
     case DELETE_PRODUCT:
@@ -41,7 +41,7 @@ export default productReducer = (state = initialState, action) => {
     case CREATE_PRODUCT:
       const newProduct = new Product(
         action.productData.id,
-        "u1",
+        action.productData.ownerId,
         action.productData.title,
         action.productData.imageUrl,
         action.productData.description,
