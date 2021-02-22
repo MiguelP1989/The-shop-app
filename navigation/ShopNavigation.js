@@ -14,6 +14,7 @@ import CartScreen from "../screens/shop/CartScreen";
 import UserProductScreen from "../screens/user/UserProductsScreen";
 import EditProductsScreen from "../screens/user/EditProductsScreen";
 import AuthScreen from "../screens/user/AuthScreen";
+import StartUpScreen from "../screens/StartUpScreen";
 
 import Colors from "../constants/Colors";
 
@@ -120,6 +121,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
+  StartUp: StartUpScreen,
   Auth: AuthNavigator,
   Shop: ShopNaviagtor,
 });
