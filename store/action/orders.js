@@ -34,10 +34,11 @@ export const fetchOrders = () => {
 };
 
 export const addOrder = (cartItems, totalAmount) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     const date = new Date();
     const resp = await fetch(
-      "https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/orders/u1.json",
+      `https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/orders/u1.json?auth=${token}`,
       {
         method: "POST",
         headers: {

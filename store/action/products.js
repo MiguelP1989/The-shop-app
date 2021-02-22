@@ -42,9 +42,10 @@ export const fetchProducts = () => {
 };
 
 export const deleteItem = (productId) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
     const resp = await fetch(
-      `https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/products/${productId}.json`,
+      `https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/products/${productId}.json?auth=${token}`,
       {
         method: "DELETE",
       }
