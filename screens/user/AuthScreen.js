@@ -9,6 +9,7 @@ import {
   Button,
   ActivityIndicator,
   Alert,
+  ImagePropTypes,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -46,7 +47,7 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const AuthScreen = ({}) => {
+const AuthScreen = ({ navigation }) => {
   // Hooks
   const dispatch = useDispatch();
   const [isSignUp, setIsSignUp] = useState(false);
@@ -102,12 +103,12 @@ const AuthScreen = ({}) => {
             formState.inputValues.password
           )
         );
+        navigation.navigate("Shop");
       }
     } catch (err) {
       setError(err.message);
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (

@@ -61,10 +61,11 @@ export const deleteItem = (productId) => {
 };
 
 export const createProduct = (title, description, imageUrl, price) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     // any async code
+    const token = getState().auth.token;
     const resp = await fetch(
-      "https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/products.json",
+      `https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/products.json?auth=${token}`,
       {
         method: "POST",
         headers: {
@@ -96,9 +97,11 @@ export const createProduct = (title, description, imageUrl, price) => {
 };
 
 export const updateProduct = (id, title, description, imageUrl) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
+    console.log("getState", getState());
+    const token = getState().auth.token;
     const resp = await fetch(
-      `https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json`,
+      `https://nativeshop-fa24b-default-rtdb.europe-west1.firebasedatabase.app/products/${id}.json?auth=${token}`,
       {
         method: "PATCH",
         headers: {

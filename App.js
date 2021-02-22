@@ -10,6 +10,7 @@ import Apploading from "expo-app-loading";
 import productReducer from "./store/reducer/products";
 import cartReducer from "./store/reducer/cart";
 import ordersReducer from "./store/reducer/orders";
+import authReducer from "./store/reducer/auth";
 import ShopNavigator from "./navigation/ShopNavigation";
 
 // Local imports
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   products: productReducer,
   cart: cartReducer,
   orders: ordersReducer,
+  auth: authReducer,
 });
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
