@@ -1,4 +1,4 @@
-import React, { useReducer, useCallback, useState } from "react";
+import React, { useReducer, useCallback, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   View,
@@ -7,6 +7,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Button,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -48,6 +50,8 @@ const AuthScreen = ({}) => {
   // Hooks
   const dispatch = useDispatch();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [error, setError] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
@@ -61,6 +65,12 @@ const AuthScreen = ({}) => {
     formIsValid: false,
   });
 
+  useEffect(() => {
+    if (error) {
+      Alert.alert("An error occcurred!", error, [{ text: "Okay" }]);
+    }
+  }, [error]);
+
   const inputChangeHandler = useCallback(
     (inputIdentifier, inputValue, inputValidity) => {
       dispatchFormState({
@@ -73,22 +83,31 @@ const AuthScreen = ({}) => {
     [dispatchFormState]
   );
 
-  const authHandler = () => {
-    if (isSignUp) {
-      dispatch(
-        authActions.signUp(
-          formState.inputValues.email,
-          formState.inputValues.password
-        )
-      );
-    } else {
-      dispatch(
-        authActions.logIn(
-          formState.inputValues.email,
-          formState.inputValues.password
-        )
-      );
+  const authHandler = async () => {
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      if (isSignUp) {
+        await dispatch(
+          authActions.signUp(
+            formState.inputValues.email,
+            formState.inputValues.password
+          )
+        );
+      } else {
+        await dispatch(
+          authActions.logIn(
+            formState.inputValues.email,
+            formState.inputValues.password
+          )
+        );
+      }
+    } catch (err) {
+      setError(err.message);
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -127,13 +146,17 @@ const AuthScreen = ({}) => {
               initialValue=""
             />
             <View style={styles.action}>
-              <View style={styles.btn}>
-                <Button
-                  title={isSignUp ? "Sign Up" : "Login"}
-                  color={Colors.primary}
-                  onPress={authHandler}
-                />
-              </View>
+              {isLoading ? (
+                <ActivityIndicator size="small" color={Colors.primary} />
+              ) : (
+                <View style={styles.btn}>
+                  <Button
+                    title={isSignUp ? "Sign Up" : "Login"}
+                    color={Colors.primary}
+                    onPress={authHandler}
+                  />
+                </View>
+              )}
               <View style={styles.btn}>
                 <Button
                   title={`Switch to ${isSignUp ? "Login" : "Sign Up"}`}
