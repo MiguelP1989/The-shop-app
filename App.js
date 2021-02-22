@@ -11,7 +11,10 @@ import productReducer from "./store/reducer/products";
 import cartReducer from "./store/reducer/cart";
 import ordersReducer from "./store/reducer/orders";
 import authReducer from "./store/reducer/auth";
+
+// wrap conatiner to give acces to redux
 import ShopNavigator from "./navigation/ShopNavigation";
+import NavigationContainer from "./navigation/NavigationContainer";
 
 // Local imports
 
@@ -47,7 +50,7 @@ const App = () => {
   }
   return (
     <Provider store={store}>
-      <ShopNavigator />
+      <NavigationContainer />
     </Provider>
   );
 };

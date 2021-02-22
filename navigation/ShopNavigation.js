@@ -120,7 +120,8 @@ const ShopNaviagtor = createDrawerNavigator(
               color={Colors.primary}
               onPress={() => {
                 dispatch(authactions.logOut());
-                props.navigation.navigate("Auth");
+                // not necessary beacuse we are navigating in SopNavigation component
+                // props.navigation.navigate("Auth");
               }}
             />
           </SafeAreaView>
